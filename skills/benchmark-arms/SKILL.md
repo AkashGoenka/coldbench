@@ -10,11 +10,11 @@ benchmark. Each question asks where something lives; the answer is the set of fi
 change to that area actually touched.
 
 You gather. Scripts decide. Never write a ground-truth file yourself: gold sets come only
-from `scripts/resolve.py`, so anyone can reproduce the same set from the same inputs.
+from `scripts/resolve.mjs`, so anyone can reproduce the same set from the same inputs.
 
 ## Prerequisites
 
-Run `scripts/check.py --repo <path>` first. It verifies all of the following and stops with
+Run `scripts/check.mjs --repo <path>` first. It verifies all of the following and stops with
 a specific message on the first failure. Do not proceed past a failure, and do not attempt
 to work around one. Report it to the user and stop.
 
@@ -22,7 +22,7 @@ to work around one. Report it to the user and stop.
 |---|---|---|
 | `git` on PATH | linkage and file derivation | `git --version` |
 | A **full** local clone of the target repo | `git log --grep` finds nothing in a shallow clone, which looks identical to "no linkage convention" | `git rev-parse --is-shallow-repository` must be `false` |
-| `python3` 3.9+ | the scripts | `python3 --version` |
+| Node 18+ | the scripts | `node --version` |
 | At least 200 commits of history | too little history means too few resolvable tickets | `git rev-list --count HEAD` |
 | **One** source of issues, see below | supplies question text | per source |
 
@@ -42,7 +42,7 @@ your first message, and if none is available, stop and tell them what to set up.
 ### 1. Check prerequisites
 
 ```
-python3 scripts/check.py --repo <path-to-clone>
+node scripts/check.mjs --repo <path-to-clone>
 ```
 
 It also reports the repo's **merge style** and samples 30 commit messages. Read that output.
@@ -72,7 +72,7 @@ Skip tickets that are obviously not code changes: duplicates, questions, release
 ### 3. Resolve tickets to files
 
 ```
-python3 scripts/resolve.py --repo <path> --tickets tickets.jsonl --out work/
+node scripts/resolve.mjs --repo <path> --tickets tickets.jsonl --out work/
 ```
 
 This finds the commits for each ticket, derives the file set, and classifies every record as
@@ -88,7 +88,7 @@ ticket linkage, so the corpus should come from git alone instead.
 ### 4. Build candidates
 
 ```
-python3 scripts/build.py --work work/
+node scripts/build.mjs --work work/
 ```
 
 Scrubs bodies, applies the quality and file-count filters, and writes a rewrite worksheet.
@@ -109,7 +109,7 @@ into a question someone would ask an agent while orienting in the codebase.
 ### 6. Finalize
 
 ```
-python3 scripts/finalize.py --work work/ --rewrites rewrites.jsonl
+node scripts/finalize.mjs --work work/ --rewrites rewrites.jsonl
 ```
 
 Applies the leak gates, scores vocabulary density per question, and emits `prompts/`,
@@ -118,6 +118,26 @@ Applies the leak gates, scores vocabulary density per question, and emits `promp
 Read `report.md` and give the user its headline numbers: how many questions, the vocabulary
 split, how many were flagged for filename leak, and the resolution rate. Flagged questions
 are not automatically dropped. Show them and let the user decide.
+
+## The output contract
+
+`finalize.mjs` appends this to every question. Do not vary it. `score.mjs` depends on it
+twice: it reads the answer files, and it maps each run transcript back to its question by
+finding this path inside the transcript.
+
+```
+After completing the task, write your final answer to ./benchmark_output/<qid>.txt.
+The file must contain ONLY repo-relative file paths, one per line. No bullets, no markdown,
+no explanations, no headers, no blank lines, no commentary. Include every file relevant to
+answering the query - files you read, edited, or determined to be relevant. Include all
+files you would point a colleague to if they asked the same question.
+Example of correct format:
+path/to/file1.ext
+path/to/file2.ext
+```
+
+Both arms get the identical contract. It is the only thing making grading mechanical, and a
+reworded contract in one arm is a single-variable violation.
 
 ## What you must not do
 
