@@ -1,0 +1,11 @@
+{
+  "name": "coldbench",
+  "displayName": "coldbench",
+  "version": "0.1.0",
+  "description": "Measure whether a tool, skill or rules file actually helps a coding agent: generate exploration questions with ground truth from your repo history, then score recall and tokens across arms.",
+  "author": { "name": "Akash Goenka", "url": "https://github.com/AkashGoenka" },
+  "homepage": "https://github.com/AkashGoenka/coldbench",
+  "repository": "https://github.com/AkashGoenka/coldbench",
+  "license": "MIT",
+  "keywords": ["benchmark", "recall", "tokens", "ground-truth", "evaluation", "agents"]
+}

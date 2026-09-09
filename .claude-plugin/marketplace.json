@@ -1,0 +1,6 @@
+{
+  "name": "coldbench",
+  "owner": { "name": "Akash Goenka" },
+  "description": "Measure whether a tool, skill or rules file actually helps a coding agent: generate exploration questions with ground truth from your repo history, then score recall and tokens across arms.",
+  "plugins": [ { "name": "coldbench", "source": "./", "description": "Measure whether a tool, skill or rules file actually helps a coding agent: generate exploration questions with ground truth from your repo history, then score recall and tokens across arms." } ]
+}

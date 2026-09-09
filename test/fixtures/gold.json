@@ -1,0 +1,5 @@
+{
+  "demo_q01": { "files": ["app/models/user.py", "app/views/auth.py"] },
+  "demo_q02": { "files": ["lib/parser.js"] },
+  "demo_q03": { "files": ["src/a.ts", "src/b.ts"] }
+}
