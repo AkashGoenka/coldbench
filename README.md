@@ -35,9 +35,15 @@ you get recall only.
 ```
 arm              n   recall     prec  jaccard     tokens  unseen
 ----------------------------------------------------------------
-baseline        27    74.6%    39.1%    33.8%     27841k       0
-withtool        27    76.6%    42.6%    36.5%     18993k       1
+baseline        27     ...      ...      ...        ...       0
+withtool        27     ...      ...      ...        ...       1
+
+withtool vs baseline:
+  recall  ... points
+  tokens  ...%
 ```
+
+Shape only; fill it with your own runs.
 
 **`unseen`** is a contamination check: a gold file the agent named in its answer but which
 never appeared in any tool input or output. The agent produced it from pretraining, not by
