@@ -1,0 +1,5 @@
+{"type":"user","message":{"role":"user","content":"1. Where does auth live? Write your final answer to ./benchmark_output/demo_q01.txt"}}
+{"type":"assistant","uuid":"u1","message":{"id":"msg_A","model":"claude-sonnet-5","content":[{"type":"text","text":"Looking."}],"usage":{"input_tokens":10,"cache_creation_input_tokens":100,"cache_read_input_tokens":1000,"output_tokens":5}}}
+{"type":"assistant","uuid":"u2","message":{"id":"msg_A","model":"claude-sonnet-5","content":[{"type":"tool_use","name":"Read","input":{"file_path":"app/views/auth.py"}}],"usage":{"input_tokens":10,"cache_creation_input_tokens":100,"cache_read_input_tokens":1000,"output_tokens":5}}}
+{"type":"system","subtype":"compact_boundary","compactMetadata":{"trigger":"auto"}}
+{"type":"assistant","uuid":"u3","message":{"id":"msg_B","model":"claude-haiku-4-5-20251001","content":[{"type":"text","text":"Done."}],"usage":{"input_tokens":20,"cache_creation_input_tokens":200,"cache_read_input_tokens":2000,"output_tokens":10}}}

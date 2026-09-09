@@ -44,33 +44,33 @@ test('macro-average weighs every query equally regardless of gold size', () => {
   assert.equal(scoreArm(gold, answers).recall, 0.5, 'not 4/5 micro')
 })
 
-// Token accounting is duplicated from convotokens rather than imported, because a
-// plugin cannot reliably import from a sibling plugin's install path. This test
-// pins the two to the same answer so they cannot silently drift apart.
-test('token accounting matches convotokens when it is installed', async (t) => {
-  const { existsSync } = await import('node:fs')
-  const { homedir } = await import('node:os')
-  const ct = join(homedir(), 'convotokens/scripts/lib/compute-usage.mjs')
-  const tx = join(homedir(), '.claude/projects')
-  if (!existsSync(ct) || !existsSync(tx)) return t.skip('convotokens or transcripts not present')
-
-  const { readdirSync, statSync } = await import('node:fs')
+// The two accounting rules that silently corrupt a token total, pinned against a
+// fixture so they hold for everyone rather than only where convotokens happens
+// to be installed:
+//   msg_A appears on two lines with the same id and must be counted once.
+//   msg_C lives in a subagent sidechain and must be counted at all.
+test('token accounting dedups by message.id and folds subagent sidechains', async () => {
   const { computeUsage } = await import('../scripts/lib/usage.mjs')
-  const theirs = (await import(ct)).computeUsage
+  const u = computeUsage(join(fx, 'transcript/run.jsonl'))
+  assert.equal(u.generations, 3, 'msg_A counted once, msg_B and msg_C once each')
+  assert.equal(u.subagentFiles, 1)
+  assert.equal(u.input, 31)
+  assert.equal(u.cacheCreate, 302)
+  assert.equal(u.cacheRead, 3003)
+  assert.equal(u.output, 19)
+  assert.equal(u.total, 3355, 'summing raw lines instead would give 4465')
+})
 
-  const projects = readdirSync(tx).map(d => join(tx, d)).filter(d => statSync(d).isDirectory())
-  let file = null
-  for (const p of projects) {
-    const j = readdirSync(p).filter(f => f.endsWith('.jsonl')).map(f => join(p, f))
-    if (j.length) { file = j.sort((a, b) => statSync(b).mtimeMs - statSync(a).mtimeMs)[0]; break }
-  }
-  if (!file) return t.skip('no transcript found')
+test('confound detectors see model drift and compaction', async () => {
+  const { computeUsage } = await import('../scripts/lib/usage.mjs')
+  const u = computeUsage(join(fx, 'transcript/run.jsonl'))
+  assert.equal(u.compactions, 1)
+  assert.deepEqual(u.models, { 'claude-sonnet-5': 2, 'claude-haiku-4-5-20251001': 1 })
+})
 
-  const a = computeUsage(file)
-  const b = (await theirs(file)).overall
-  assert.equal(a.total, b.total, 'totals must agree')
-  assert.equal(a.input, b.input_tokens)
-  assert.equal(a.output, b.output_tokens)
-  assert.equal(a.cacheRead, b.cache_read_input_tokens)
-  assert.equal(a.cacheCreate, b.cache_creation_input_tokens)
+test('tool I/O collection sees paths from tool_use inputs', async () => {
+  const { collectToolIO } = await import('../scripts/lib/usage.mjs')
+  const io = collectToolIO(join(fx, 'transcript/run.jsonl'))
+  assert.ok(io.includes('app/views/auth.py'), 'a file the agent read is visible')
+  assert.ok(!io.includes('app/models/user.py'), 'a file it never touched is not')
 })

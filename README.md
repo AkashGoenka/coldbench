@@ -78,10 +78,16 @@ Subagent transcripts are folded in, since otherwise an arm that delegates looks 
 
 No dollar figures. Prices change and subscriptions are not per-token.
 
-If you have [convotokens](https://github.com/AkashGoenka/convotokens) installed, the test
-suite checks coldbench's token accounting against it. The implementations are separate on
-purpose, since a plugin cannot reliably import from a sibling plugin's install path, and a
-test keeps them from drifting.
+## Relationship to convotokens
+
+[convotokens](https://github.com/AkashGoenka/convotokens) answers "what did this session
+cost me." coldbench answers "did the thing I installed help." They share no code.
+
+coldbench does not depend on it and does not import it. The accounting was verified to
+agree with it exactly on the same transcript, then pinned here against a committed fixture
+so the guarantee holds for everyone rather than only where both are installed.
+
+Run convotokens when you want your own spend. Run coldbench when you want a comparison.
 
 ## Reading a result honestly
 
