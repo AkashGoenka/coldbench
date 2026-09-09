@@ -8,7 +8,8 @@
 // without them you get recall only, which is half a benchmark.
 
 import { readdirSync, existsSync, statSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { join, resolve } from 'node:path'
+import { homedir } from 'node:os'
 import { loadGold, loadAnswers, scoreArm } from './lib/score.mjs'
 import { computeUsage, collectToolIO } from './lib/usage.mjs'
 
@@ -48,9 +49,27 @@ function mapTranscripts (dir) {
   return byQid
 }
 
+// Claude Code stores transcripts under ~/.claude/projects/<path with / and . as ->.
+// Nobody should have to work that out by hand, so an arm may name the repo copy
+// itself and we resolve the folder.
+function transcriptDirFor (repoPath) {
+  const abs = resolve(repoPath)
+  const mangled = abs.replace(/[/.]/g, '-')
+  return join(homedir(), '.claude', 'projects', mangled)
+}
+
 const arms = []
 for (const spec of armSpecs) {
-  const [label, answersDir, transcriptDir] = spec.split(':')
+  const [label, answersDir, txSpec] = spec.split(':')
+  // A directory that exists but holds no .jsonl is a repo path, not a transcript
+  // dir. Checking existence alone would silently accept it and report no tokens.
+  const hasJsonl = d => d && existsSync(d) && readdirSync(d).some(f => f.endsWith('.jsonl'))
+  let transcriptDir = txSpec
+  if (txSpec && !hasJsonl(txSpec)) {
+    const guess = transcriptDirFor(txSpec)
+    if (hasJsonl(guess)) transcriptDir = guess
+    else console.error(`! ${label}: no .jsonl transcripts in ${txSpec} or ${guess}`)
+  }
   const answers = loadAnswers(answersDir)
   const scored = scoreArm(gold, answers)
   const tx = mapTranscripts(transcriptDir)

@@ -20,30 +20,59 @@ Nothing here is specific to any tool. Point it at whatever you want to evaluate.
 
 Step 4 works today. Steps 1 and 2 are in progress; see Status.
 
-## Scoring
+## How you actually run this
+
+Say you want to know whether some tool helps. You make two copies of the same repo:
+
+```
+~/bench/myrepo-plain     <- nothing installed
+~/bench/myrepo-withtool  <- the thing you are testing
+```
+
+**1. Run the same questions in both copies.** Open an agent session in each copy and paste
+the questions one at a time. Every question ends with an instruction to write its answer to
+`./benchmark_output/<qid>.txt`, so after a full pass each copy has a folder like:
+
+```
+~/bench/myrepo-plain/benchmark_output/myrepo_q01.txt
+~/bench/myrepo-plain/benchmark_output/myrepo_q02.txt
+...
+```
+
+Each of those files is just a list of file paths the agent decided were relevant.
+
+**2. Score both copies with one command.**
 
 ```
 node scripts/score.mjs \
   --gold ground_truth.json \
-  --arm baseline:answers/baseline:transcripts/baseline \
-  --arm withtool:answers/withtool:transcripts/withtool
+  --arm plain:~/bench/myrepo-plain/benchmark_output:~/bench/myrepo-plain \
+  --arm withtool:~/bench/myrepo-withtool/benchmark_output:~/bench/myrepo-withtool
 ```
 
-An arm is `<label>:<answersDir>[:<transcriptDir>]`. Transcripts are optional; without them
-you get recall only.
+Each `--arm` is three things separated by colons: a name you choose, the folder of answer
+files, and the repo copy itself. You do not need to find your transcript folder; pointing at
+the repo copy is enough, and coldbench locates the session logs for it.
+
+Leave off the third part if you only care about recall and not tokens.
+
+**3. Read the output.**
 
 ```
 arm              n   recall     prec  jaccard     tokens  unseen
 ----------------------------------------------------------------
-baseline        27     ...      ...      ...        ...       0
+plain           27     ...      ...      ...        ...       0
 withtool        27     ...      ...      ...        ...       1
 
-withtool vs baseline:
+withtool vs plain:
   recall  ... points
   tokens  ...%
 ```
 
-Shape only; fill it with your own runs.
+`recall` is how much of the right answer each arm found. `tokens` is what it cost. You need
+both, because the cheapest run is always the one that gave up early.
+
+That is the whole measurement. One command, after both passes are done.
 
 ### Confound detectors
 
@@ -80,12 +109,16 @@ No dollar figures. Prices change and subscriptions are not per-token.
 
 ## Relationship to convotokens
 
-[convotokens](https://github.com/AkashGoenka/convotokens) answers "what did this session
-cost me." coldbench answers "did the thing I installed help." They share no code.
+**coldbench does not use [convotokens](https://github.com/AkashGoenka/convotokens).** It is
+not a dependency, it is not imported, and it does not need to be installed. coldbench counts
+tokens with its own code.
 
-coldbench does not depend on it and does not import it. The accounting was verified to
-agree with it exactly on the same transcript, then pinned here against a committed fixture
-so the guarantee holds for everyone rather than only where both are installed.
+The two do the counting the same way, and that was checked once by hand: both were run over
+the same session log and produced identical numbers. That check is now a test here, against
+a small log committed to this repo, so it does not depend on convotokens being present.
+
+The reason for separate code rather than sharing it: one plugin cannot reliably find another
+plugin's files on disk.
 
 Run convotokens when you want your own spend. Run coldbench when you want a comparison.
 
