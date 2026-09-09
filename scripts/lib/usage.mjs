@@ -41,6 +41,7 @@ export function computeUsage (transcriptPath) {
   const subs = subFiles.flatMap(readJsonl)
 
   const seen = new Map()
+  const models = new Map()
   for (const rec of [...main, ...subs]) {
     if (rec?.type !== 'assistant') continue
     const msg = rec.message
@@ -49,7 +50,14 @@ export function computeUsage (transcriptPath) {
     const id = msg.id || `${rec.uuid ?? Math.random()}`
     if (seen.has(id)) continue
     seen.set(id, u)
+    const m = msg.model || 'unknown'
+    models.set(m, (models.get(m) || 0) + 1)
   }
+
+  // A context compaction mid-run changes what the agent could still see, so a run
+  // that compacted is not comparable to one that did not. Marker is a system
+  // record, not an assistant turn, so it never reaches the loop above.
+  const compactions = main.filter(r => r?.type === 'system' && r?.subtype === 'compact_boundary').length
 
   const t = { input: 0, cacheCreate: 0, cacheRead: 0, output: 0 }
   for (const u of seen.values()) {
@@ -62,7 +70,9 @@ export function computeUsage (transcriptPath) {
     ...t,
     total: t.input + t.cacheCreate + t.cacheRead + t.output,
     generations: seen.size,
-    subagentFiles: subFiles.length
+    subagentFiles: subFiles.length,
+    models: Object.fromEntries(models),
+    compactions
   }
 }
 

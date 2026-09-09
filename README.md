@@ -45,6 +45,16 @@ withtool vs baseline:
 
 Shape only; fill it with your own runs.
 
+### Confound detectors
+
+Scoring also flags three things that quietly invalidate a comparison:
+
+- **Model drift** — an arm whose queries did not all run on the same model is not a
+  single-variable arm, whatever else you controlled.
+- **Context compaction** — a run that compacted mid-flight saw a rewritten context, so it
+  is not comparable to one that did not.
+- **Contamination** — see below.
+
 **`unseen`** is a contamination check: a gold file the agent named in its answer but which
 never appeared in any tool input or output. The agent produced it from pretraining, not by
 exploring your repo. On well-known open source repositories this is the difference between
@@ -68,6 +78,11 @@ Subagent transcripts are folded in, since otherwise an arm that delegates looks 
 
 No dollar figures. Prices change and subscriptions are not per-token.
 
+If you have [convotokens](https://github.com/AkashGoenka/convotokens) installed, the test
+suite checks coldbench's token accounting against it. The implementations are separate on
+purpose, since a plugin cannot reliably import from a sibling plugin's install path, and a
+test keeps them from drifting.
+
 ## Reading a result honestly
 
 **A single pair of runs is not a measurement.** Run one arm against itself first and see how
@@ -87,6 +102,7 @@ the working tree have all silently confounded real runs.
 | Step | State |
 |---|---|
 | `score` | Working. Reproduces a previously published recall figure to 0.1 points. |
+| Confound detection | Model drift, compaction and contamination flags |
 | Question generation | Skill written, scripts not built |
 | Arm parity checking | Design exists, not ported |
 | Nondeterminism floor | Not built |

@@ -58,6 +58,8 @@ for (const spec of armSpecs) {
   let tokens = null
   let unseen = 0
   let scoredWithTx = 0
+  const models = new Map()
+  let compacted = []
   if (tx.size) {
     tokens = { input: 0, cacheCreate: 0, cacheRead: 0, output: 0, total: 0, generations: 0 }
     for (const row of scored.rows) {
@@ -66,12 +68,14 @@ for (const spec of armSpecs) {
       scoredWithTx++
       const u = computeUsage(f)
       for (const k of Object.keys(tokens)) tokens[k] += u[k] || 0
+      for (const [m, n] of Object.entries(u.models || {})) models.set(m, (models.get(m) || 0) + n)
+      if (u.compactions > 0) compacted.push(row.qid)
       // Contamination: a gold file the agent named but never saw in tool I/O.
       const io = collectToolIO(f)
       unseen += row.hit.filter(p => !io.includes(p)).length
     }
   }
-  arms.push({ label, ...scored, tokens, unseen, scoredWithTx })
+  arms.push({ label, ...scored, tokens, unseen, scoredWithTx, models: Object.fromEntries(models), compacted })
 }
 
 if (asJson) {
@@ -97,7 +101,11 @@ for (const a of arms) {
 for (const a of arms) {
   if (a.missingAnswers.length) console.log(`\n! ${a.label}: no answer file for ${a.missingAnswers.length} queries: ${a.missingAnswers.join(', ')}`)
   if (a.tokens && a.scoredWithTx < a.n) console.log(`! ${a.label}: token total covers ${a.scoredWithTx}/${a.n} queries (no transcript matched the rest)`)
-  if (a.tokens && a.unseen) console.log(`! ${a.label}: ${a.unseen} correct file(s) never appeared in tool I/O — named from pretraining, not exploration`)
+  if (a.tokens && a.unseen) console.log(`! ${a.label}: ${a.unseen} correct file(s) never appeared in tool I/O - named from pretraining, not exploration`)
+  // '<synthetic>' is a Claude Code internal marker, not a model the run chose.
+  const ms = Object.keys(a.models || {}).filter(m => m !== '<synthetic>' && m !== 'unknown')
+  if (ms.length > 1) console.log(`! ${a.label}: ran on ${ms.length} models (${ms.join(', ')}) - not a single-variable arm`)
+  if (a.compacted?.length) console.log(`! ${a.label}: context compacted mid-run on ${a.compacted.length} quer(y/ies): ${a.compacted.join(', ')} - those runs saw a rewritten context`)
 }
 
 if (arms.length === 2) {

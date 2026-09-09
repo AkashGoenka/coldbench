@@ -43,3 +43,34 @@ test('macro-average weighs every query equally regardless of gold size', () => {
   ])
   assert.equal(scoreArm(gold, answers).recall, 0.5, 'not 4/5 micro')
 })
+
+// Token accounting is duplicated from convotokens rather than imported, because a
+// plugin cannot reliably import from a sibling plugin's install path. This test
+// pins the two to the same answer so they cannot silently drift apart.
+test('token accounting matches convotokens when it is installed', async (t) => {
+  const { existsSync } = await import('node:fs')
+  const { homedir } = await import('node:os')
+  const ct = join(homedir(), 'convotokens/scripts/lib/compute-usage.mjs')
+  const tx = join(homedir(), '.claude/projects')
+  if (!existsSync(ct) || !existsSync(tx)) return t.skip('convotokens or transcripts not present')
+
+  const { readdirSync, statSync } = await import('node:fs')
+  const { computeUsage } = await import('../scripts/lib/usage.mjs')
+  const theirs = (await import(ct)).computeUsage
+
+  const projects = readdirSync(tx).map(d => join(tx, d)).filter(d => statSync(d).isDirectory())
+  let file = null
+  for (const p of projects) {
+    const j = readdirSync(p).filter(f => f.endsWith('.jsonl')).map(f => join(p, f))
+    if (j.length) { file = j.sort((a, b) => statSync(b).mtimeMs - statSync(a).mtimeMs)[0]; break }
+  }
+  if (!file) return t.skip('no transcript found')
+
+  const a = computeUsage(file)
+  const b = (await theirs(file)).overall
+  assert.equal(a.total, b.total, 'totals must agree')
+  assert.equal(a.input, b.input_tokens)
+  assert.equal(a.output, b.output_tokens)
+  assert.equal(a.cacheRead, b.cache_read_input_tokens)
+  assert.equal(a.cacheCreate, b.cache_creation_input_tokens)
+})
