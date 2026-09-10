@@ -2,3 +2,5 @@ node_modules/
 work/
 *.tgz
 .DS_Store
+.coldstart/
+.claude/
