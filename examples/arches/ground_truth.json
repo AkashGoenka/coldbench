@@ -1,0 +1,317 @@
+{
+ "arches_q01": {
+  "issue_number": 12689,
+  "scope": "single",
+  "files": [
+   "arches/app/templates/base-manager.htm",
+   "arches/app/templates/navbar/sidenav.htm"
+  ]
+ },
+ "arches_q02": {
+  "issue_number": 12578,
+  "scope": "single",
+  "files": [
+   "arches/app/datatypes/datatypes.py",
+   "tests/utils/datatypes/filelist_datatype_tests.py"
+  ]
+ },
+ "arches_q03": {
+  "issue_number": 12489,
+  "scope": "single",
+  "files": [
+   "arches/management/commands/datatype.py",
+   "arches/management/commands/packages.py"
+  ]
+ },
+ "arches_q04": {
+  "issue_number": 12473,
+  "scope": "single",
+  "files": [
+   "arches/app/utils/external_oauth_backend.py",
+   "tests/views/auth_tests.py"
+  ]
+ },
+ "arches_q05": {
+  "issue_number": 12394,
+  "scope": "single",
+  "files": [
+   "arches/app/models/migrations/12394_resource_identifier.py",
+   "arches/app/models/models.py"
+  ]
+ },
+ "arches_q06": {
+  "issue_number": 12032,
+  "scope": "single",
+  "files": [
+   "arches/app/models/graph.py",
+   "tests/models/graph_tests.py"
+  ]
+ },
+ "arches_q07": {
+  "issue_number": 11701,
+  "scope": "single",
+  "files": [
+   "arches/apps.py",
+   "arches/management/commands/updateproject.py"
+  ]
+ },
+ "arches_q08": {
+  "issue_number": 11565,
+  "scope": "single",
+  "files": [
+   "arches/app/models/migrations/11565_graphmodel_unique_slug.py",
+   "arches/app/models/models.py"
+  ]
+ },
+ "arches_q09": {
+  "issue_number": 11882,
+  "scope": "single",
+  "files": [
+   "arches/app/models/migrations/11882_principal_user_read_only.py",
+   "arches/app/models/models.py"
+  ]
+ },
+ "arches_q10": {
+  "issue_number": 11641,
+  "scope": "single",
+  "files": [
+   "arches/app/datatypes/datatypes.py",
+   "tests/utils/datatypes/datatype_tests.py"
+  ]
+ },
+ "arches_q11": {
+  "issue_number": 12557,
+  "scope": "multi-file",
+  "files": [
+   "arches/app/datatypes/datatypes.py",
+   "arches/app/models/migrations/12542_update_file_list_default_config.py",
+   "arches/app/models/migrations/12557_add_language_datatype.py",
+   "arches/app/templates/views/components/datatypes/language.htm",
+   "tests/utils/datatypes/datatype_tests.py"
+  ]
+ },
+ "arches_q12": {
+  "issue_number": 12542,
+  "scope": "multi-file",
+  "files": [
+   "arches/app/datatypes/datatypes.py",
+   "arches/app/models/migrations/12542_update_file_list_default_config.py",
+   "arches/app/templates/views/components/datatypes/file-list.htm"
+  ]
+ },
+ "arches_q13": {
+  "issue_number": 12150,
+  "scope": "multi-file",
+  "files": [
+   "arches/app/functions/base.py",
+   "arches/app/models/resource.py",
+   "tests/models/resource_test.py"
+  ]
+ },
+ "arches_q14": {
+  "issue_number": 11105,
+  "scope": "multi-file",
+  "files": [
+   "arches/app/templates/views/components/widgets/concept-select.htm",
+   "arches/app/utils/frontend_configuration_utils.py",
+   "tests/utils/test_settings_utils.py"
+  ]
+ },
+ "arches_q15": {
+  "issue_number": 11579,
+  "scope": "multi-file",
+  "files": [
+   "arches/app/models/migrations/11579_ids_search_filter.py",
+   "arches/app/search/components/ids.py",
+   "tests/views/search_tests.py"
+  ]
+ },
+ "arches_q16": {
+  "issue_number": 11857,
+  "scope": "multi-file",
+  "files": [
+   "arches/app/models/migrations/11857_spatial_view_source_identifier_filter.py",
+   "arches/app/models/models.py",
+   "tests/models/spatialview_model_tests.py"
+  ]
+ },
+ "arches_q17": {
+  "issue_number": 11808,
+  "scope": "multi-file",
+  "files": [
+   "arches/app/models/migrations/11726_join_tile_nodegroup.py",
+   "arches/app/models/models.py",
+   "tests/models/tile_model_tests.py"
+  ]
+ },
+ "arches_q18": {
+  "issue_number": 11657,
+  "scope": "multi-file",
+  "files": [
+   "arches/app/datatypes/datatypes.py",
+   "arches/app/templates/javascript.htm",
+   "arches/app/templates/views/components/datatypes/resource-instance.htm",
+   "tests/search/search_tests.py"
+  ]
+ },
+ "arches_q19": {
+  "issue_number": 12105,
+  "scope": "multi-file",
+  "files": [
+   "arches/app/search/concept_search.py",
+   "arches/app/search/search_term.py",
+   "arches/app/templates/javascript.htm",
+   "arches/app/views/search.py",
+   "arches/settings.py"
+  ]
+ },
+ "arches_q20": {
+  "issue_number": 10437,
+  "scope": "multi-file",
+  "files": [
+   "arches/app/models/graph.py",
+   "arches/app/models/migrations/10437_node_alias_not_null.py",
+   "arches/app/models/models.py",
+   "tests/models/node_tests.py",
+   "tests/models/tile_model_tests.py"
+  ]
+ },
+ "arches_q21": {
+  "issue_number": 12545,
+  "scope": "cross-cutting",
+  "files": [
+   "arches/app/etl_modules/base_import_module.py",
+   "arches/app/etl_modules/branch_excel_importer.py",
+   "arches/app/etl_modules/import_single_csv.py",
+   "arches/app/etl_modules/jsonld_importer.py",
+   "arches/app/etl_modules/tile_excel_importer.py",
+   "tests/bulkdata/branch_excel_tests.py"
+  ]
+ },
+ "arches_q22": {
+  "issue_number": 12101,
+  "scope": "cross-cutting",
+  "files": [
+   "arches/app/models/graph.py",
+   "arches/app/models/migrations/12000_update_serialized_graph_functions.py",
+   "arches/app/models/models.py",
+   "arches/app/utils/data_management/resource_graphs/exporter.py",
+   "arches/app/views/graph.py",
+   "tests/models/graph_tests.py"
+  ]
+ },
+ "arches_q23": {
+  "issue_number": 10887,
+  "scope": "cross-cutting",
+  "files": [
+   "arches/app/etl_modules/jsonld_importer.py",
+   "arches/app/models/migrations/10887_loadstaging_nodegroup_nullable.py",
+   "arches/app/models/models.py",
+   "arches/app/utils/request.py",
+   "arches/app/views/etl_manager.py",
+   "tests/views/etl_manager_tests.py"
+  ]
+ },
+ "arches_q24": {
+  "issue_number": 11848,
+  "scope": "cross-cutting",
+  "files": [
+   "arches/app/models/graph.py",
+   "arches/app/models/migrations/11848_alter_spatialview_geometrynode.py",
+   "arches/app/models/models.py",
+   "arches/app/models/utils.py",
+   "arches/settings.py",
+   "tests/models/spatialview_model_tests.py"
+  ]
+ },
+ "arches_q25": {
+  "issue_number": 11842,
+  "scope": "cross-cutting",
+  "files": [
+   "arches/admin.py",
+   "arches/app/models/migrations/11842_userpreferences.py",
+   "arches/app/models/models.py",
+   "arches/app/views/api/__init__.py",
+   "arches/app/views/api/userpreference.py",
+   "arches/urls.py",
+   "tests/views/user_preference_api_tests.py"
+  ]
+ },
+ "arches_q26": {
+  "issue_number": 11408,
+  "scope": "cross-cutting",
+  "files": [
+   "arches/app/etl_modules/branch_excel_importer.py",
+   "arches/app/etl_modules/bulk_edit_concept.py",
+   "arches/app/etl_modules/import_single_csv.py",
+   "arches/app/etl_modules/tile_excel_importer.py",
+   "arches/app/models/migrations/11408_loadstaging_sortorder.py",
+   "arches/app/models/models.py",
+   "tests/bulkdata/tile_excel_tests.py"
+  ]
+ },
+ "arches_q27": {
+  "issue_number": 11725,
+  "scope": "cross-cutting",
+  "files": [
+   "arches/app/models/migrations/11725_add_blank_and_related_names.py",
+   "arches/app/models/migrations/11725_make_tiledata_not_nullable.py",
+   "arches/app/models/models.py",
+   "arches/app/models/resource.py",
+   "arches/app/models/tile.py",
+   "arches/app/models/utils.py",
+   "tests/models/resource_test.py",
+   "tests/models/tile_model_tests.py"
+  ]
+ },
+ "arches_q28": {
+  "issue_number": 11888,
+  "scope": "single",
+  "files": [
+   "arches/app/models/models.py",
+   "tests/models/spatialview_model_tests.py"
+  ]
+ },
+ "arches_q29": {
+  "issue_number": 11652,
+  "scope": "multi-file",
+  "files": [
+   "arches/app/views/api/__init__.py",
+   "arches/app/views/api/auth.py",
+   "arches/app/views/auth.py"
+  ]
+ },
+ "arches_q30": {
+  "issue_number": 11803,
+  "scope": "multi-file",
+  "files": [
+   "arches/app/models/models.py",
+   "arches/app/models/tile.py",
+   "arches/app/views/tile.py",
+   "tests/models/tile_model_tests.py"
+  ]
+ },
+ "arches_q31": {
+  "issue_number": 11835,
+  "scope": "multi-file",
+  "files": [
+   "arches/app/models/system_settings.py",
+   "arches/app/utils/data_management/resources/formats/format.py",
+   "arches/app/utils/data_management/resources/formats/rdffile.py",
+   "arches/app/views/file.py",
+   "arches/app/views/resource.py"
+  ]
+ },
+ "arches_q32": {
+  "issue_number": 11570,
+  "scope": "cross-cutting",
+  "files": [
+   "arches/app/models/card.py",
+   "arches/app/models/graph.py",
+   "arches/app/models/migrations/11570_harden_editable_future_graphs.py",
+   "arches/app/models/models.py",
+   "arches/app/views/graph.py",
+   "tests/models/graph_tests.py"
+  ]
+ }
+}

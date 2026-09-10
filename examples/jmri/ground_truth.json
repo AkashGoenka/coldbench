@@ -1,0 +1,245 @@
+{
+  "jmri_q01": {
+    "issue_number": 12296,
+    "scope": "single",
+    "files": [
+      "java/src/jmri/jmrit/decoderdefn/IdentifyDecoder.java",
+      "java/test/jmri/jmrit/decoderdefn/IdentifyDecoderTest.java"
+    ]
+  },
+  "jmri_q02": {
+    "issue_number": 12317,
+    "scope": "single",
+    "files": [
+      "java/src/jmri/jmrix/dccpp/DCCppThrottle.java",
+      "java/test/jmri/jmrix/dccpp/DCCppThrottleTest.java"
+    ]
+  },
+  "jmri_q03": {
+    "issue_number": 12723,
+    "scope": "single",
+    "files": [
+      "java/src/jmri/jmrit/display/Editor.java",
+      "java/src/jmri/jmrit/whereused/ReporterWhereUsed.java"
+    ]
+  },
+  "jmri_q04": {
+    "issue_number": 12950,
+    "scope": "single",
+    "files": [
+      "java/src/jmri/jmrix/dccpp/DCCppTrafficController.java",
+      "java/src/jmri/jmrix/dccpp/serial/DCCppAdapter.java"
+    ]
+  },
+  "jmri_q05": {
+    "issue_number": 13102,
+    "scope": "single",
+    "files": [
+      "java/src/jmri/jmrit/throttle/ThrottleFrame.java",
+      "java/src/jmri/jmrit/throttle/ThrottlesTableCellRenderer.java"
+    ]
+  },
+  "jmri_q06": {
+    "issue_number": 13281,
+    "scope": "single",
+    "files": [
+      "java/src/jmri/jmrit/logixng/SymbolTable.java",
+      "java/test/jmri/jmrit/logixng/actions/WebRequestTest.java"
+    ]
+  },
+  "jmri_q07": {
+    "issue_number": 13398,
+    "scope": "single",
+    "files": [
+      "java/src/jmri/jmrit/beantable/routetable/AbstractRouteAddEditFrame.java",
+      "java/test/jmri/jmrit/beantable/RouteTableActionTest.java"
+    ]
+  },
+  "jmri_q08": {
+    "issue_number": 14070,
+    "scope": "single",
+    "files": [
+      "java/src/jmri/jmrit/display/SignalMastIcon.java",
+      "java/src/jmri/jmrit/display/layoutEditor/LayoutEditor.java"
+    ]
+  },
+  "jmri_q09": {
+    "issue_number": 12337,
+    "scope": "multi-file",
+    "files": [
+      "java/src/jmri/jmrit/withrottle/MultiThrottleController.java",
+      "java/src/jmri/jmrix/loconet/LocoNetThrottle.java",
+      "java/src/jmri/jmrix/loconet/Pr2Throttle.java",
+      "java/test/jmri/jmrix/loconet/LocoNetThrottleTest.java",
+      "java/test/jmri/jmrix/loconet/Pr2ThrottleTest.java"
+    ]
+  },
+  "jmri_q10": {
+    "issue_number": 12770,
+    "scope": "multi-file",
+    "files": [
+      "java/src/jmri/jmrix/mqtt/MqttLight.java",
+      "java/src/jmri/jmrix/mqtt/MqttPowerManager.java",
+      "java/src/jmri/jmrix/mqtt/MqttSensor.java",
+      "java/src/jmri/jmrix/mqtt/MqttTurnout.java"
+    ]
+  },
+  "jmri_q11": {
+    "issue_number": 13151,
+    "scope": "multi-file",
+    "files": [
+      "java/src/jmri/jmrit/display/Editor.java",
+      "java/src/jmri/jmrit/display/LogixNGDeleteDialog.java",
+      "java/src/jmri/jmrit/display/PanelDeleteAction.java"
+    ]
+  },
+  "jmri_q12": {
+    "issue_number": 13248,
+    "scope": "multi-file",
+    "files": [
+      "java/src/jmri/SpeedStepMode.java",
+      "java/src/jmri/jmrix/tmcc/SerialThrottle.java",
+      "java/src/jmri/jmrix/tmcc/SerialThrottleManager.java"
+    ]
+  },
+  "jmri_q13": {
+    "issue_number": 13632,
+    "scope": "multi-file",
+    "files": [
+      "java/src/jmri/jmrit/beantable/block/BlockTableDataModel.java",
+      "java/src/jmri/jmrit/beantable/block/BlockTableJTable.java",
+      "java/test/jmri/jmrit/beantable/BlockTableActionTest.java"
+    ]
+  },
+  "jmri_q14": {
+    "issue_number": 14080,
+    "scope": "multi-file",
+    "files": [
+      "java/src/jmri/jmrit/beantable/TransitTableAction.java",
+      "java/src/jmri/jmrit/beantable/beanedit/BlockEditAction.java",
+      "java/src/jmri/jmrit/beantable/beanedit/OBlockEditAction.java",
+      "java/src/jmri/jmrit/beantable/oblock/SignalEditFrame.java",
+      "java/src/jmri/jmrit/dispatcher/ActivateTrainFrame.java"
+    ]
+  },
+  "jmri_q15": {
+    "issue_number": 14194,
+    "scope": "multi-file",
+    "files": [
+      "java/src/jmri/configurexml/StoreAndCompare.java",
+      "java/src/jmri/configurexml/swing/StoreAndCompareDialog.java",
+      "java/src/jmri/managers/DefaultShutDownManager.java"
+    ]
+  },
+  "jmri_q16": {
+    "issue_number": 14203,
+    "scope": "multi-file",
+    "files": [
+      "java/src/jmri/jmrix/loconet/LocoNetSlot.java",
+      "java/src/jmri/jmrix/loconet/SlotManager.java",
+      "java/test/jmri/jmrix/loconet/SlotManagerTest.java"
+    ]
+  },
+  "jmri_q17": {
+    "issue_number": 14666,
+    "scope": "multi-file",
+    "files": [
+      "java/src/jmri/implementation/JmriConfigurationManager.java",
+      "java/src/jmri/jmrit/roster/RosterConfigManager.java",
+      "java/src/jmri/jmrit/roster/RosterLocationUnavailableException.java",
+      "java/test/jmri/jmrit/roster/RosterConfigManagerTest.java",
+      "java/test/jmri/jmrit/roster/RosterLocationUnavailableExceptionTest.java"
+    ]
+  },
+  "jmri_q18": {
+    "issue_number": 14717,
+    "scope": "multi-file",
+    "files": [
+      "java/src/jmri/jmrit/logixng/Stack.java",
+      "java/src/jmri/jmrit/logixng/implementation/DefaultStack.java",
+      "java/src/jmri/jmrit/logixng/implementation/DefaultSymbolTable.java"
+    ]
+  },
+  "jmri_q19": {
+    "issue_number": 14793,
+    "scope": "multi-file",
+    "files": [
+      "java/src/jmri/jmrix/can/swing/CanNamedPaneAction.java",
+      "java/src/jmri/util/swing/JmriAbstractAction.java",
+      "java/src/jmri/util/swing/JmriNamedPaneAction.java"
+    ]
+  },
+  "jmri_q20": {
+    "issue_number": 14876,
+    "scope": "multi-file",
+    "files": [
+      "java/src/jmri/jmrit/roster/RosterEntry.java",
+      "java/src/jmri/jmrit/roster/RosterEntryPane.java",
+      "java/src/jmri/jmrit/symbolicprog/tabbedframe/PaneProgFrame.java"
+    ]
+  },
+  "jmri_q21": {
+    "issue_number": 12060,
+    "scope": "cross-cutting",
+    "files": [
+      "java/src/jmri/jmrix/AbstractMonFrame.java",
+      "java/src/jmri/jmrix/dccpp/swing/mon/DCCppMonFrame.java",
+      "java/test/jmri/jmrix/AbstractMonFrameTest.java",
+      "java/test/jmri/jmrix/dccpp/swing/mon/DCCppMonActionTest.java",
+      "java/test/jmri/jmrix/dccpp/swing/mon/DCCppMonFrameTest.java",
+      "java/test/jmri/jmrix/easydcc/easydccmon/EasyDccMonFrameTest.java"
+    ]
+  },
+  "jmri_q22": {
+    "issue_number": 12906,
+    "scope": "cross-cutting",
+    "files": [
+      "java/src/jmri/jmrit/logixng/actions/ActionListenOnBeans.java",
+      "java/src/jmri/jmrit/logixng/actions/ActionListenOnBeansLocalVariable.java",
+      "java/src/jmri/jmrit/logixng/actions/ActionListenOnBeansTable.java",
+      "java/src/jmri/jmrit/logixng/util/LogixNG_Thread.java",
+      "java/test/jmri/jmrit/logixng/actions/ActionListenOnBeansTest.java",
+      "java/test/jmri/jmrit/logixng/actions/WaitForScaffold.java"
+    ]
+  },
+  "jmri_q23": {
+    "issue_number": 13231,
+    "scope": "cross-cutting",
+    "files": [
+      "java/src/jmri/jmrit/logix/Engineer.java",
+      "java/src/jmri/jmrit/logix/NXFrame.java",
+      "java/src/jmri/jmrit/logix/ThrottleSetting.java",
+      "java/src/jmri/jmrit/logix/WarrantFrame.java",
+      "java/src/jmri/jmrit/logix/configurexml/WarrantManagerXml.java",
+      "java/test/jmri/jmrit/logix/ThrottleSettingTest.java"
+    ]
+  },
+  "jmri_q24": {
+    "issue_number": 15100,
+    "scope": "cross-cutting",
+    "files": [
+      "java/src/jmri/server/json/JSON.java",
+      "java/src/jmri/server/json/power/JsonPowerHttpService.java",
+      "java/src/jmri/server/json/power/JsonPowerSocketService.java",
+      "java/src/jmri/server/json/power/package-info.java",
+      "java/src/jmri/server/json/throttle/JsonThrottle.java",
+      "java/test/jmri/server/json/power/JsonPowerHttpServiceTest.java",
+      "java/test/jmri/server/json/power/JsonPowerSocketServiceTest.java",
+      "java/test/jmri/server/json/throttle/JsonThrottleSocketServiceTest.java"
+    ]
+  },
+  "jmri_q25": {
+    "issue_number": 15114,
+    "scope": "cross-cutting",
+    "files": [
+      "java/src/jmri/jmrix/AbstractConnectionConfig.java",
+      "java/src/jmri/jmrix/AbstractPortController.java",
+      "java/src/jmri/jmrix/PortAdapter.java",
+      "java/src/jmri/jmrix/dccpp/network/ConnectionConfig.java",
+      "java/src/jmri/jmrix/dccpp/network/DCCppEthernetAdapter.java",
+      "java/src/jmri/jmrix/dccpp/network/configurexml/ConnectionConfigXml.java",
+      "java/test/jmri/jmrix/dccpp/network/DCCppEthernetAdapterTest.java",
+      "java/test/jmri/jmrix/dccpp/network/configurexml/ConnectionConfigXmlTest.java"
+    ]
+  }
+}

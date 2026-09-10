@@ -1,0 +1,8 @@
+20. [multi-file] Where in this codebase are roster entry attributes defined, and where does the roster entry pane and the programmer's PaneProgFrame surface them? I want to find the files responsible for the roster entry model and editing UI so I can understand the surface area touched by acceleration and stopping attributes (e.g., weight, horsepower) on a roster entry.
+
+After completing the task, write your final answer to ./benchmark_output/jmri_q20.txt.
+The file must contain ONLY repo-relative file paths, one per line. No bullets, no markdown, no explanations, no headers, no blank lines, no commentary. Include every file relevant to answering the query — files you read, edited, or determined to be relevant. Include all files you would point a colleague to if they asked the same question.
+Example of correct format:
+path/to/file1.ext
+path/to/file2.ext
+Do not skip this step. Do not add explanations before or after the list. The file must exist and contain only paths when you finish.

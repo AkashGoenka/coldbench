@@ -1,0 +1,8 @@
+18. [multi-file] How does LogixNG's 'Execute Delayed' action capture local variables when its timer is started, and where is the symbol-table snapshot resolved when the timer expires? I want to find the files responsible for the LogixNG stack and symbol-table behavior so I can understand why the values used at expiry appear to be the current values rather than the values at scheduling time.
+
+After completing the task, write your final answer to ./benchmark_output/jmri_q18.txt.
+The file must contain ONLY repo-relative file paths, one per line. No bullets, no markdown, no explanations, no headers, no blank lines, no commentary. Include every file relevant to answering the query — files you read, edited, or determined to be relevant. Include all files you would point a colleague to if they asked the same question.
+Example of correct format:
+path/to/file1.ext
+path/to/file2.ext
+Do not skip this step. Do not add explanations before or after the list. The file must exist and contain only paths when you finish.

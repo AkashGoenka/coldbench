@@ -1,0 +1,8 @@
+31. [multi-file] Now that a tile's nodegroup can be null (to support stranded tiles when a graph has migrated away), where in this codebase is a tile's nodegroup accessed in a way that could raise a DoesNotExist error? I want to find the callsites that read a tile's .nodegroup so I can understand which ones need to handle a missing nodegroup gracefully.
+
+After completing the task, write your final answer to ./benchmark_output/arches_q31.txt.
+The file must contain ONLY repo-relative file paths, one per line. No bullets, no markdown, no explanations, no headers, no blank lines, no commentary. Include every file relevant to answering the query — files you read, edited, or determined to be relevant. Include all files you would point a colleague to if they asked the same question.
+Example of correct format:
+path/to/file1.ext
+path/to/file2.ext
+Do not skip this step. Do not add explanations before or after the list. The file must exist and contain only paths when you finish.

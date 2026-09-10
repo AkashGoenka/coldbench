@@ -1,0 +1,8 @@
+16. [multi-file] How does the spatial view geometrynode dropdown source the list of nodes it offers, and where is the filter for geojson-feature-collection datatypes applied? I want to find the files responsible for the spatial view model and its geometrynode filtering so I can understand why nodes from system settings and from non-active graph versions are showing up in the dropdown.
+
+After completing the task, write your final answer to ./benchmark_output/arches_q16.txt.
+The file must contain ONLY repo-relative file paths, one per line. No bullets, no markdown, no explanations, no headers, no blank lines, no commentary. Include every file relevant to answering the query — files you read, edited, or determined to be relevant. Include all files you would point a colleague to if they asked the same question.
+Example of correct format:
+path/to/file1.ext
+path/to/file2.ext
+Do not skip this step. Do not add explanations before or after the list. The file must exist and contain only paths when you finish.

@@ -1,0 +1,8 @@
+10. [single] How does the resource-instance-list datatype build the JSON representation of a tile via to_json(), and where does display_value get populated for each referenced resource? I want to find the files that implement to_json() for ri-list datatypes so I can understand why display_value can be missing on one of two tile values.
+
+After completing the task, write your final answer to ./benchmark_output/arches_q10.txt.
+The file must contain ONLY repo-relative file paths, one per line. No bullets, no markdown, no explanations, no headers, no blank lines, no commentary. Include every file relevant to answering the query — files you read, edited, or determined to be relevant. Include all files you would point a colleague to if they asked the same question.
+Example of correct format:
+path/to/file1.ext
+path/to/file2.ext
+Do not skip this step. Do not add explanations before or after the list. The file must exist and contain only paths when you finish.

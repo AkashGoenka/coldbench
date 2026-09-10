@@ -1,0 +1,8 @@
+5. [single] How does this codebase render rows in the throttles list panel, and where is the selection background color applied to the row's panel? I want to find the files responsible for the throttle row rendering, since when the OS accent color is dark the foreground text becomes hard to read on the selection background.
+
+After completing the task, write your final answer to ./benchmark_output/jmri_q05.txt.
+The file must contain ONLY repo-relative file paths, one per line. No bullets, no markdown, no explanations, no headers, no blank lines, no commentary. Include every file relevant to answering the query — files you read, edited, or determined to be relevant. Include all files you would point a colleague to if they asked the same question.
+Example of correct format:
+path/to/file1.ext
+path/to/file2.ext
+Do not skip this step. Do not add explanations before or after the list. The file must exist and contain only paths when you finish.
