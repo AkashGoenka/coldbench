@@ -8,6 +8,11 @@ cheapest run is always the one that gives up early.
 
 Nothing here is specific to any tool. Point it at whatever you want to evaluate.
 
+Two finished question sets live in [`examples/`](examples/) — 32 questions for
+[arches](https://github.com/archesproject/arches) (Python) and 25 for
+[JMRI](https://github.com/JMRI/JMRI) (Java), each with the ground truth it was scored
+against. Start there to see what a corpus looks like before generating your own.
+
 ## The loop
 
 1. **Generate questions** from your repo's own history. A closed ticket plus the commit
@@ -51,10 +56,31 @@ node scripts/score.mjs \
 ```
 
 Each `--arm` is three things separated by colons: a name you choose, the folder of answer
-files, and the repo copy itself. You do not need to find your transcript folder; pointing at
-the repo copy is enough, and coldbench locates the session logs for it.
+files, and either the transcript folder or the repo copy. Leave off the third part if you
+only care about recall and not tokens.
 
-Leave off the third part if you only care about recall and not tokens.
+**Check the transcript folder before you trust a token number.** Pointing at the repo copy
+resolves to `~/.claude/projects/<mangled path>`, which on any machine that has benchmarked
+more than once holds loose retries from several runs — and archived runs usually sit in
+sibling subfolders that are not read. Scoring the wrong folder fails silently: it still
+prints a number.
+
+```
+node scripts/inspect.mjs --arm plain:~/bench/myrepo-plain --arm withtool:~/bench/myrepo-withtool
+```
+
+An arm is safe to score when its transcript count equals its query count, it reports no
+archive subfolders, and the models match across arms. `inspect` also shows what the
+newest-transcript rule is discarding, which on one real run was 53% of the spend, and
+catches a cross-arm model difference that `score` cannot see while looking at one arm at a
+time. Both scripts carry instructions for an agent running them on your behalf.
+
+If a repo copy was deleted and its answer files went with it, rebuild them from the
+transcripts instead of rerunning:
+
+```
+node scripts/recover-answers.mjs --transcripts <dir> --out answers/plain
+```
 
 **3. Read the output.**
 
@@ -72,7 +98,7 @@ withtool vs plain:
 `recall` is how much of the right answer each arm found. `tokens` is what it cost. You need
 both, because the cheapest run is always the one that gave up early.
 
-That is the whole measurement. One command, after both passes are done.
+That is the whole measurement: check the arms with `inspect`, then score them.
 
 ### Confound detectors
 
@@ -82,12 +108,23 @@ Scoring also flags three things that quietly invalidate a comparison:
   single-variable arm, whatever else you controlled.
 - **Context compaction** — a run that compacted mid-flight saw a rewritten context, so it
   is not comparable to one that did not.
-- **Contamination** — see below.
+- **`unseen`** — a correct file the agent named but never opened. Treat a non-zero count
+  as a reason to read that arm's answers before quoting its recall.
 
-**`unseen`** is a contamination check: a gold file the agent named in its answer but which
-never appeared in any tool input or output. The agent produced it from pretraining, not by
-exploring your repo. On well-known open source repositories this is the difference between
-a real result and a model reciting what it already knows.
+### Try it without generating anything
+
+`examples/` ships two corpora with gold sets, so you can run the scoring half immediately:
+
+```
+node scripts/score.mjs --gold examples/arches/ground_truth.json --arm base:path/to/answers
+```
+
+Each question is a ready-to-paste prompt with the output contract already appended, and each
+gold entry carries its `issue_number` and a `scope` label (`single`, `multi-file`,
+`cross-cutting`) so results can be stratified rather than only averaged. See
+[`examples/README.md`](examples/README.md) for the format and the caveats — in particular,
+both repos are public and well-known, so treat them as a worked example rather than a
+benchmark you publish against.
 
 ### Input formats
 
@@ -141,10 +178,13 @@ the working tree have all silently confounded real runs.
 | Step | State |
 |---|---|
 | `score` | Working. Reproduces a previously published recall figure to 0.1 points. |
-| Confound detection | Model drift, compaction and contamination flags |
+| Confound detection | Model drift, compaction, `unseen`; cross-arm checks in `inspect` |
+| `inspect` | Working. Transcript inventory, duplicate spend, cross-arm parity |
+| `recover-answers` | Working. Rebuilds answer files from transcripts |
 | Question generation | Skill written, scripts not built |
-| Arm parity checking | Design exists, not ported |
+| Arm parity checking | Partial. `inspect` covers models, query sets and duplicates; working-tree and config parity not ported |
 | Nondeterminism floor | Not built |
+| Example corpora | arches (32q) and JMRI (25q) with gold sets, in `examples/` |
 
 ## License
 
