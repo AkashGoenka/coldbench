@@ -28,7 +28,7 @@ in coldbench is specific to it, and nothing here should become specific to it.
   once per content block, and raw summing inflates 2–2.6x. Fold subagent sidechains from
   `<stem>/subagents/`, or a delegating arm looks cheap. Both are pinned by tests against a
   committed fixture in `test/fixtures/transcript/`.
-- **The output contract** in `skills/build-benchmark-prompts/SKILL.md` is reproduced byte-for-byte in
+- **The output contract** in `skills/build-prompts/SKILL.md` is reproduced byte-for-byte in
   every prompt under `examples/*/prompts/`. `score.mjs` depends on it twice: to read answer
   files, and to map a transcript back to its question. Changing it invalidates existing
   corpora, and a reworded contract in one arm is a single-variable violation.
@@ -37,7 +37,7 @@ in coldbench is specific to it, and nothing here should become specific to it.
 
 ## Known gaps, deliberately open
 
-- Question generation: the procedure is written in `skills/build-benchmark-prompts/SKILL.md`, but
+- Question generation: the procedure is written in `skills/build-prompts/SKILL.md`, but
   `check.mjs`, `resolve.mjs`, `build.mjs` and `finalize.mjs` do not exist yet.
 - `scoreArm` drops a query with no answer file from the mean rather than scoring it zero, so
   an arm can raise its recall by not answering. Warned about, not prevented. Paired scoring

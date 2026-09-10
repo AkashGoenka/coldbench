@@ -1,5 +1,5 @@
 ---
-name: build-benchmark-prompts
+name: build-prompts
 description: Build a reproducible exploration-benchmark prompt set from a repo's issue tracker and git history. Produces scrubbed questions plus a ground-truth file list per question, so you can measure any tool, skill or rules file by running the same questions with and without it.
 ---
 
