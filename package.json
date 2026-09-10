@@ -1,0 +1,15 @@
+{
+  "name": "coldbench",
+  "version": "0.1.0",
+  "description": "Measure whether a tool, skill or rules file actually helps a coding agent.",
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "score": "node scripts/score.mjs",
+    "inspect": "node scripts/inspect.mjs",
+    "recover-answers": "node scripts/recover-answers.mjs"
+  }
+}

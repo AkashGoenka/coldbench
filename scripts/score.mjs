@@ -6,12 +6,48 @@
 //
 // An --arm is <label>:<answersDir>[:<transcriptDir>]. Transcripts are optional;
 // without them you get recall only, which is half a benchmark.
+//
+// ---------------------------------------------------------------------------
+// IF YOU ARE AN AI AGENT RUNNING THIS SCRIPT, READ THIS FIRST.
+//
+// Getting the transcript folder wrong is the single most likely way to produce a
+// confident, wrong number here. It is wrong silently: the arm still scores, the
+// tokens still print, nothing errors. Do not guess the path.
+//
+// An arm's third field may be either a transcript folder or the repo copy. If you
+// pass the repo copy, it resolves to ~/.claude/projects/<abs path with / and . as ->.
+// That resolution is a guess about which folder holds the run you mean, and on a
+// machine that has benchmarked anything more than once it is usually the wrong one.
+//
+// Do this instead, before you trust any output:
+//
+//   1. Run inspect.mjs on both arms first:
+//        node scripts/inspect.mjs --arm a:<path> --arm b:<path>
+//
+//   2. Check three things in its output, and stop if any is wrong:
+//        - transcript count EQUALS query count. More transcripts than queries
+//          means retries are present and the newest-only rule is silently
+//          discarding real spend - it moved one real run by 53%.
+//        - it reports NO archive subfolders. Archived runs commonly sit in
+//          sibling folders (jsonl-v27/ and the like). Reading is flat, so the
+//          parent folder gives you loose retries and hides the clean run. If a
+//          subfolder is the run you want, pass THAT folder, not the parent.
+//        - models are identical across arms. Each arm can be internally
+//          consistent and still differ from its partner. score.mjs only looks
+//          at one arm at a time and cannot see this; inspect.mjs can.
+//
+//   3. Ask the user which run they mean if more than one candidate folder exists.
+//      Do not pick the newest by mtime on their behalf. "Which of these is the
+//      run you want scored?" with the candidates listed is the correct move.
+//
+// If the answer files are gone because the repo copy was deleted, recover them
+// from the transcripts rather than abandoning the run:
+//   node scripts/recover-answers.mjs --transcripts <dir> --out <answersDir>
+// ---------------------------------------------------------------------------
 
-import { readdirSync, existsSync, statSync, readFileSync } from 'node:fs'
-import { join, resolve } from 'node:path'
-import { homedir } from 'node:os'
 import { loadGold, loadAnswers, scoreArm } from './lib/score.mjs'
 import { computeUsage, collectToolIO } from './lib/usage.mjs'
+import { resolveTranscriptDir, newestByQid } from './lib/transcripts.mjs'
 
 const argv = process.argv.slice(2)
 const opt = (name, def) => {
@@ -31,48 +67,14 @@ if (!goldPath || !armSpecs.length) {
 
 const gold = loadGold(goldPath)
 
-// Map each transcript to a query by the answer path the prompt contract requires
-// the agent to write to. Far more reliable than parsing a leading number out of
-// the first user message, which breaks on any reworded prompt.
-function mapTranscripts (dir) {
-  const byQid = new Map()
-  if (!dir || !existsSync(dir)) return byQid
-  const files = readdirSync(dir).filter(f => f.endsWith('.jsonl')).map(f => join(dir, f))
-  for (const f of files) {
-    const head = readFileSync(f, 'utf8')
-    const m = head.match(/benchmark_output\/([A-Za-z0-9_-]+_q\d+)\.txt/)
-    if (!m) continue
-    const qid = m[1]
-    const prev = byQid.get(qid)
-    if (!prev || statSync(f).mtimeMs > statSync(prev).mtimeMs) byQid.set(qid, f)
-  }
-  return byQid
-}
-
-// Claude Code stores transcripts under ~/.claude/projects/<path with / and . as ->.
-// Nobody should have to work that out by hand, so an arm may name the repo copy
-// itself and we resolve the folder.
-function transcriptDirFor (repoPath) {
-  const abs = resolve(repoPath)
-  const mangled = abs.replace(/[/.]/g, '-')
-  return join(homedir(), '.claude', 'projects', mangled)
-}
-
 const arms = []
 for (const spec of armSpecs) {
   const [label, answersDir, txSpec] = spec.split(':')
-  // A directory that exists but holds no .jsonl is a repo path, not a transcript
-  // dir. Checking existence alone would silently accept it and report no tokens.
-  const hasJsonl = d => d && existsSync(d) && readdirSync(d).some(f => f.endsWith('.jsonl'))
-  let transcriptDir = txSpec
-  if (txSpec && !hasJsonl(txSpec)) {
-    const guess = transcriptDirFor(txSpec)
-    if (hasJsonl(guess)) transcriptDir = guess
-    else console.error(`! ${label}: no .jsonl transcripts in ${txSpec} or ${guess}`)
-  }
+  const { dir: transcriptDir, tried } = resolveTranscriptDir(txSpec)
+  if (txSpec && !transcriptDir) console.error(`! ${label}: no .jsonl transcripts in ${tried.join(' or ')}`)
   const answers = loadAnswers(answersDir)
   const scored = scoreArm(gold, answers)
-  const tx = mapTranscripts(transcriptDir)
+  const tx = newestByQid(transcriptDir)
 
   let tokens = null
   let unseen = 0
