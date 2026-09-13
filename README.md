@@ -1,12 +1,15 @@
 # coldbench
 
-Measure whether a tool, skill or rules file actually helps a coding agent.
+A benchmark harness for measuring whether a tool, skill or rules file actually helps a
+coding agent. Tool-agnostic — nothing here is specific to any tool; point it at whatever
+you want to evaluate.
 
-Two numbers, together or not at all: **how many tokens** a run cost, and **whether it
-found the right files**. A token saving with no recall number is not a result, because the
-cheapest run is always the one that gives up early.
-
-Nothing here is specific to any tool. Point it at whatever you want to evaluate.
+It generates unbiased exploration questions from a repo's own closed-issue history (ground
+truth comes from the repository, not from anyone's judgment), runs them against two
+identical copies of the repo — one with the thing under test, one without — and scores each
+on two numbers: **tokens spent** and **whether it found the right files**. A token saving
+with no recall number is not a result, because the cheapest run is always the one that
+gives up early.
 
 Two finished question sets live in [`examples/`](examples/) — 32 questions for
 [arches](https://github.com/archesproject/arches) (Python) and 25 for
