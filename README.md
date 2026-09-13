@@ -181,7 +181,7 @@ the working tree have all silently confounded real runs.
 | Confound detection | Model drift, compaction, `unseen`; cross-arm checks in `inspect` |
 | `inspect` | Working. Transcript inventory, duplicate spend, cross-arm parity |
 | `recover-answers` | Working. Rebuilds answer files from transcripts |
-| Question generation | Skill written, scripts not built |
+| Question generation | Working. `check` / `resolve` / `build` / `finalize`, git-log-based linkage |
 | Arm parity checking | Partial. `inspect` covers models, query sets and duplicates; working-tree and config parity not ported |
 | Nondeterminism floor | Not built |
 | Example corpora | arches (32q) and JMRI (25q) with gold sets, in `examples/` |

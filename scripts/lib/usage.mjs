@@ -9,17 +9,9 @@
 //      <stem>/subagents/**/*.jsonl and are NOT in the parent transcript. Their
 //      tokens are real spend; omitting them makes a delegating arm look cheap.
 
-import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs'
+import { existsSync, readdirSync, statSync } from 'node:fs'
 import { join } from 'node:path'
-
-function readJsonl (path) {
-  const out = []
-  for (const line of readFileSync(path, 'utf8').split('\n')) {
-    if (!line.trim()) continue
-    try { out.push(JSON.parse(line)) } catch { /* truncated tail */ }
-  }
-  return out
-}
+import { readJsonl } from './jsonl.mjs'
 
 function walk (dir, acc = []) {
   if (!existsSync(dir)) return acc
