@@ -1,0 +1,29 @@
+{
+  "name": "coldbench",
+  "version": "0.1.0",
+  "description": "Measure whether a tool, skill or rules file actually helps a coding agent: generate exploration questions with ground truth from your repo history, then score recall and tokens across arms.",
+  "author": {
+    "name": "Akash Goenka",
+    "url": "https://github.com/AkashGoenka"
+  },
+  "homepage": "https://github.com/AkashGoenka/coldbench",
+  "repository": "https://github.com/AkashGoenka/coldbench",
+  "license": "MIT",
+  "keywords": ["benchmark", "recall", "tokens", "ground-truth", "evaluation", "agents"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "coldbench",
+    "shortDescription": "Measure whether a tool actually helps a coding agent",
+    "longDescription": "Generate exploration questions with ground truth from your repo's own closed-issue history, run them across two identical arms (with and without the thing under test), then score recall, precision and tokens. No dollar estimates, no invented data.",
+    "developerName": "Akash Goenka",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write", "Bash"],
+    "websiteURL": "https://github.com/AkashGoenka/coldbench",
+    "defaultPrompt": [
+      "Generate a question set for this repo's closed issues.",
+      "Score these two arms and tell me the recall and token delta.",
+      "Check whether my two benchmark arms are single-variable before I trust the result."
+    ],
+    "brandColor": "#DC2626"
+  }
+}

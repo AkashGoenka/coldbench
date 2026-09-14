@@ -37,11 +37,6 @@ in coldbench is specific to it, and nothing here should become specific to it.
 
 ## Known gaps, deliberately open
 
-- Question generation: the procedure is written in `skills/build-prompts/SKILL.md`, but
-  `check.mjs`, `resolve.mjs`, `build.mjs` and `finalize.mjs` do not exist yet.
-- `scoreArm` drops a query with no answer file from the mean rather than scoring it zero, so
-  an arm can raise its recall by not answering. Warned about, not prevented. Paired scoring
-  across arms is the fix and is not built.
 - Nondeterminism floor: not built. A single pair of runs is not a measurement.
 
 ## Decisions already settled — do not relitigate
@@ -54,3 +49,6 @@ in coldbench is specific to it, and nothing here should become specific to it.
   vocabulary, and feature names often match module names.
 - No tracker integrations. Users bring their own issue source through whatever they already
   have connected. The agent gathers, scripts decide.
+- A missing answer file scores zero (recall, precision and jaccard all 0 for that query), not
+  excluded from the mean. An arm can no longer raise its average by declining to answer the
+  hard questions. See `scoreArm` in `scripts/lib/score.mjs`.

@@ -15,9 +15,11 @@
 // tokens still print, nothing errors. Do not guess the path.
 //
 // An arm's third field may be either a transcript folder or the repo copy. If you
-// pass the repo copy, it resolves to ~/.claude/projects/<abs path with / and . as ->.
-// That resolution is a guess about which folder holds the run you mean, and on a
-// machine that has benchmarked anything more than once it is usually the wrong one.
+// pass the repo copy, it first resolves to ~/.claude/projects/<abs path with / and
+// . as ->, and if nothing is there, falls back to matching Codex sessions under
+// ~/.codex/sessions by cwd. Either resolution is a guess about which run you mean,
+// and on a machine that has benchmarked anything more than once it is usually the
+// wrong one.
 //
 // Do this instead, before you trust any output:
 //
@@ -70,11 +72,11 @@ const gold = loadGold(goldPath)
 const arms = []
 for (const spec of armSpecs) {
   const [label, answersDir, txSpec] = spec.split(':')
-  const { dir: transcriptDir, tried } = resolveTranscriptDir(txSpec)
+  const { dir: transcriptDir, tried, files: resolvedFiles } = resolveTranscriptDir(txSpec)
   if (txSpec && !transcriptDir) console.error(`! ${label}: no .jsonl transcripts in ${tried.join(' or ')}`)
   const answers = loadAnswers(answersDir)
   const scored = scoreArm(gold, answers)
-  const tx = newestByQid(transcriptDir)
+  const tx = newestByQid(resolvedFiles ?? transcriptDir)
 
   let tokens = null
   let unseen = 0

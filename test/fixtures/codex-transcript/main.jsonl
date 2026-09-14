@@ -1,0 +1,8 @@
+{"type":"session_meta","payload":{"id":"codex-main-1","cwd":"/tmp/codex-fixture-repo"}}
+{"type":"turn_context","payload":{"model":"gpt-5.6-terra"}}
+{"type":"event_msg","payload":{"type":"user_message","message":"1. Where does auth live? Write your final answer to ./benchmark_output/demo_q01.txt"}}
+{"type":"event_msg","payload":{"type":"token_count","info":{"total_token_usage":{"input_tokens":100,"cached_input_tokens":20,"output_tokens":5,"reasoning_output_tokens":2,"total_tokens":105}}}}
+{"type":"event_msg","payload":{"type":"token_count","info":{"total_token_usage":{"input_tokens":300,"cached_input_tokens":120,"cache_write_input_tokens":7,"output_tokens":15,"reasoning_output_tokens":4,"total_tokens":315}}}}
+{"type":"response_item","payload":{"type":"custom_tool_call","name":"functions.exec","input":"{\"cmd\":\"sed -n '1p' app/views/auth.py\"}"}}
+{"type":"response_item","payload":{"type":"custom_tool_call_output","output":"app/views/auth.py contents"}}
+{"type":"compacted","payload":{}}

@@ -74,8 +74,10 @@ export function scoreArm (gold, answers) {
   const rows = []
   for (const [qid, { files }] of gold) {
     const ans = answers.get(qid)
-    if (!ans) continue
-    rows.push({ qid, ...scoreOne(files, ans.files), rejected: ans.rejected.length })
+    // A failed or missing answer is a failed query, not an excuse to remove it
+    // from the denominator. Keeping the row also lets score.mjs charge any
+    // transcript for the failed run to the correct arm.
+    rows.push({ qid, ...scoreOne(files, ans?.files || []), rejected: ans?.rejected.length || 0, missing: !ans })
   }
   rows.sort((x, y) => x.qid.localeCompare(y.qid, undefined, { numeric: true }))
   const n = rows.length

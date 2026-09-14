@@ -5,13 +5,17 @@
 // answer path the prompt contract forces the agent to write to; see SKILL.md.
 
 import { readdirSync, existsSync, statSync, readFileSync } from 'node:fs'
-import { join, resolve } from 'node:path'
+import { join, resolve, dirname } from 'node:path'
 import { homedir } from 'node:os'
+import { codexSessionsRoot, findCodexSessionsForCwd } from './codex.mjs'
 
 export const ANSWER_PATH_RE = /benchmark_output\/([A-Za-z0-9_-]+_q\d+)\.txt/
 
+export const isJsonlFile = p =>
+  !!p && existsSync(p) && statSync(p).isFile() && p.endsWith('.jsonl')
+
 export const hasJsonl = d =>
-  !!d && existsSync(d) && readdirSync(d).some(f => f.endsWith('.jsonl'))
+  !!d && existsSync(d) && statSync(d).isDirectory() && readdirSync(d).some(f => f.endsWith('.jsonl'))
 
 // Claude Code stores transcripts under ~/.claude/projects/<path with / and . as ->.
 // The mangling is lossy - benchmark/repos and benchmark-repos collapse to the same
@@ -23,17 +27,35 @@ export function transcriptDirFor (repoPath) {
 // An arm may name either a transcript folder or the repo copy itself. A directory
 // that exists but holds no .jsonl is a repo path, not a transcript dir; accepting
 // it on existence alone would silently report no tokens.
+//
+// Codex has no per-repo directory - session files sit flat under
+// ~/.codex/sessions and matching ones are found by reading cwd out of each
+// file's own session_meta - so a repo-path spec that misses the Claude guess
+// falls through to a Codex cwd search. That search returns a scattered file
+// list rather than one real directory, so `files` carries it explicitly and
+// `dir` stays a display label; every reader below accepts either shape.
 export function resolveTranscriptDir (spec) {
   if (!spec) return { dir: null, tried: [] }
+  if (isJsonlFile(spec)) return { dir: dirname(spec), tried: [spec], files: [spec], source: 'file' }
   if (hasJsonl(spec)) return { dir: spec, tried: [spec] }
-  const guess = transcriptDirFor(spec)
-  return { dir: hasJsonl(guess) ? guess : null, tried: [spec, guess] }
+  const claudeGuess = transcriptDirFor(spec)
+  if (hasJsonl(claudeGuess)) return { dir: claudeGuess, tried: [spec, claudeGuess] }
+  const codexFiles = findCodexSessionsForCwd(resolve(spec))
+  if (codexFiles.length) return { dir: codexSessionsRoot, tried: [spec, claudeGuess, codexSessionsRoot], files: codexFiles, source: 'codex-cwd' }
+  return { dir: null, tried: [spec, claudeGuess, codexSessionsRoot] }
 }
 
-export const listTranscripts = dir =>
-  !dir || !existsSync(dir)
+// Accepts either a literal directory (Claude Code's case: one folder per
+// repo) or an already-resolved file list (Codex's case: matches scattered
+// across ~/.codex/sessions) - groupByQid and archiveSubdirs below build on
+// this so neither needs to know which engine produced its input.
+export const listTranscripts = dirOrFiles => {
+  if (Array.isArray(dirOrFiles)) return dirOrFiles
+  if (isJsonlFile(dirOrFiles)) return [dirOrFiles]
+  return !dirOrFiles || !existsSync(dirOrFiles)
     ? []
-    : readdirSync(dir).filter(f => f.endsWith('.jsonl')).map(f => join(dir, f))
+    : readdirSync(dirOrFiles).filter(f => f.endsWith('.jsonl')).map(f => join(dirOrFiles, f))
+}
 
 export function qidOf (file) {
   const m = readFileSync(file, 'utf8').match(ANSWER_PATH_RE)

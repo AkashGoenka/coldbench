@@ -16,6 +16,60 @@ Two finished question sets live in [`examples/`](examples/) — 32 questions for
 [JMRI](https://github.com/JMRI/JMRI) (Java), each with the ground truth it was scored
 against. Start there to see what a corpus looks like before generating your own.
 
+## Install
+
+coldbench ships as a skills-only plugin. [`skills/build-prompts/SKILL.md`](skills/build-prompts/SKILL.md)
+drives question generation (`check` / `resolve` / `build` / `finalize`) and is pure git-history
+analysis — it runs identically no matter which agent installs it. Everything else is a
+`node scripts/*.mjs` command you can already run without installing anything; the plugin just
+wires the skill into your agent.
+
+**Claude Code**
+
+```text
+/plugin marketplace add AkashGoenka/coldbench
+/plugin install coldbench@coldbench
+```
+
+or from the CLI:
+
+```bash
+claude plugin marketplace add https://github.com/AkashGoenka/coldbench.git
+claude plugin install coldbench@coldbench
+```
+
+For local development, load the checkout directly: `claude --plugin-dir /path/to/coldbench`.
+
+**Codex**
+
+```bash
+codex plugin marketplace add https://github.com/AkashGoenka/coldbench.git
+codex plugin add coldbench@coldbench
+```
+
+The manifest is [`.codex-plugin/plugin.json`](.codex-plugin/plugin.json); no MCP server is
+required. `score.mjs` and `inspect.mjs` also score Codex-run arms: an arm's transcript field
+may be a Codex session file, a folder of them, or a repo path, which resolves against
+`~/.codex/sessions` by matching `cwd` the same way a Claude Code arm resolves against
+`~/.claude/projects`. Codex writes cumulative `token_count` snapshots rather than Claude's
+per-block deltas, so [`scripts/lib/codex.mjs`](scripts/lib/codex.mjs) keeps the latest snapshot
+per session rather than summing them, and folds in subagent rollouts linked by
+`parent_thread_id` (checked both directly on `session_meta` and nested under
+`source.subagent.thread_spawn`, since real sessions use either form depending on age) —
+mirroring [convotokens](https://github.com/AkashGoenka/convotokens)'s `compute-codex-usage.mjs`,
+which this was checked against and verified against real transcripts under `~/.codex/sessions`.
+
+The `unseen` contamination check (a gold file named but never seen in tool I/O) also applies
+to Codex. Native `response_item` tool calls and results are included in its trace, alongside
+the token totals and recall for a Codex arm.
+
+Accounting for each engine is a separate module — [`scripts/lib/claude.mjs`](scripts/lib/claude.mjs)
+and [`scripts/lib/codex.mjs`](scripts/lib/codex.mjs) — since the two transcript shapes share
+nothing beyond "a JSONL file". [`scripts/lib/usage.mjs`](scripts/lib/usage.mjs) is only the
+per-file dispatch between them (`computeUsage`/`collectToolIO`/`countToolCalls` all just check
+which engine wrote the file and call the matching module); neither `score.mjs` nor `inspect.mjs`
+nor any test needs to say which engine an arm ran on.
+
 ## The loop
 
 1. **Generate questions** from your repo's own history. A closed ticket plus the commit
@@ -26,7 +80,7 @@ against. Start there to see what a corpus looks like before generating your own.
 3. **Run the questions** in both arms. Each run writes a list of relevant file paths.
 4. **Score** recall, precision and tokens, and compare.
 
-Step 4 works today. Steps 1 and 2 are in progress; see Status.
+Steps 1, 3 and 4 work today. Step 2 (arm parity checking) is partial; see Status.
 
 ## How you actually run this
 
@@ -188,6 +242,7 @@ the working tree have all silently confounded real runs.
 | Arm parity checking | Partial. `inspect` covers models, query sets and duplicates; working-tree and config parity not ported |
 | Nondeterminism floor | Not built |
 | Example corpora | arches (32q) and JMRI (25q) with gold sets, in `examples/` |
+| Codex transcript scoring | Working. Token totals, recall and `unseen` exploration checks score a Codex-run arm |
 
 ## License
 

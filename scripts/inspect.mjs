@@ -36,14 +36,17 @@ const arms = []
 for (const spec of armSpecs) {
   const i = spec.indexOf(':')
   const label = spec.slice(0, i)
-  const { dir, tried } = resolveTranscriptDir(spec.slice(i + 1))
+  const { dir, tried, files: resolvedFiles, source } = resolveTranscriptDir(spec.slice(i + 1))
   if (!dir) {
     console.error(`! ${label}: no .jsonl transcripts in ${tried.join(' or ')}`)
     continue
   }
+  // A Codex cwd match is scattered across ~/.codex/sessions rather than one
+  // real directory, so `dir` alone would overclaim - the display label says so.
+  const displayDir = source === 'codex-cwd' ? `${dir} (${resolvedFiles.length} Codex session(s) matched by cwd)` : dir
 
-  const byQid = groupByQid(dir)
-  const files = listTranscripts(dir)
+  const byQid = groupByQid(resolvedFiles ?? dir)
+  const files = listTranscripts(resolvedFiles ?? dir)
   const unmapped = files.length - [...byQid.values()].reduce((s, r) => s + r.length, 0)
 
   const sum = { input: 0, cacheCreate: 0, cacheRead: 0, output: 0 }
@@ -61,10 +64,12 @@ for (const spec of armSpecs) {
   }
 
   arms.push({
-    label, dir, files: files.length, queries: byQid.size, unmapped,
+    label, dir: displayDir, resolveKey: resolvedFiles ?? dir, files: files.length, queries: byQid.size, unmapped,
     newestOnly, allRuns, dups, compacted,
     models: Object.fromEntries(models),
-    archives: archiveSubdirs(dir).map(p => basename(p)),
+    // Explicit files and Codex cwd matches have no single directory whose
+    // siblings are meaningful archive candidates.
+    archives: resolvedFiles ? [] : archiveSubdirs(dir).map(p => basename(p)),
     split: sum
   })
 }
@@ -113,7 +118,7 @@ if (arms.length === 2) {
     console.log(`    That is a second variable. The comparison does not isolate what you changed.`)
   } else console.log(`  models identical (${ma.join(', ') || 'none'})`)
 
-  const qa = new Set([...groupByQid(a.dir).keys()]), qb = new Set([...groupByQid(b.dir).keys()])
+  const qa = new Set([...groupByQid(a.resolveKey).keys()]), qb = new Set([...groupByQid(b.resolveKey).keys()])
   const onlyA = [...qa].filter(q => !qb.has(q)), onlyB = [...qb].filter(q => !qa.has(q))
   if (onlyA.length || onlyB.length) {
     console.log(`  ! query sets differ: ${onlyA.length} only in ${a.label}, ${onlyB.length} only in ${b.label}`)
